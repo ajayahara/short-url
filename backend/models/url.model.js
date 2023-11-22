@@ -8,6 +8,7 @@ const UrlSchema=new mongoose.Schema({
     description:{type:String,required:true},
     status:{type:String,enum:['active','expired','draft'],default:'active'},
     startDate:{type:Date,default:Date.now()},
+    expireDate:{type:Date,required:true},
     stats:{
         totalVisitors:{type:Number,default:0},
         uniqueVisitors:{type:Number,default:0}
