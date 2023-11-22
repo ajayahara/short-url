@@ -2,9 +2,19 @@ const { UserModel } = require('../models/user.model.js');
 
 
 const getAllUsers=async (req,res)=>{
+    const {page,limit,blocked}=req.query;
+    const pageToBe=page||1;
+    const limitToBe=limit||10;
+    const skip=(pageToBe-1)*limitToBe;
+    let filter={};
+    if(blocked==='true'){
+        filter={blocked:true};
+    }else{
+        filter={blocked:false};
+    }
     try {
-        const allUsers=await UserModel.find();
-        return res.status(200).json({users:allUsers}); 
+        const users=await UserModel.find(filter).skip(skip).limit(limitToBe);
+        return res.status(200).json({users}); 
     } catch (error) {
         return res.status(500).json({error:'Error while finding all users'})
     }
@@ -16,7 +26,7 @@ const getUserByItsId=async (req,res)=>{
         const user=await UserModel.findById(id);
         return res.status(200).json({user}); 
     } catch (error) {
-        return res.status(500).json({error:'Error while finding all users'})
+        return res.status(500).json({error:'Error while finding user by its Id'})
     }
 };
 
