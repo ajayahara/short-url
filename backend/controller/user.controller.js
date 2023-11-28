@@ -24,6 +24,29 @@ const getUserByItsId=async (req,res)=>{
     const {id}=req.params;
     try {
         const user=await UserModel.findById(id);
+        if(!user){
+            return res.status(400).json({message:'No user found with this id'})
+        }
+        return res.status(200).json({user}); 
+    } catch (error) {
+        return res.status(500).json({error:'Error while finding user by its Id'})
+    }
+};
+// Not updates/not working
+const modifyUserByItsId=async (req,res)=>{
+    const {id}=req.params;
+    try {
+        const user=await UserModel.findById(id);
+        return res.status(200).json({user}); 
+    } catch (error) {
+        return res.status(500).json({error:'Error while finding user by its Id'})
+    }
+};
+
+const deleteUserByItsId=async (req,res)=>{
+    const {id}=req.params;
+    try {
+        const user=await UserModel.findById(id);
         return res.status(200).json({user}); 
     } catch (error) {
         return res.status(500).json({error:'Error while finding user by its Id'})
@@ -32,5 +55,7 @@ const getUserByItsId=async (req,res)=>{
 
 module.exports={
     getAllUsers,
-    getUserByItsId
+    getUserByItsId,
+    modifyUserByItsId,
+    deleteUserByItsId
 }
