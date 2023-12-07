@@ -1,6 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-:root {
-  
+/* :root {
+
+} */
+*{
+  padding: 0%;
+  margin: 0%;
+  box-sizing: border-box;
 }
+body{
+  @apply bg-gray-800;
+}
+input,textarea{
+  @apply bg-gray-800;
+}
+.nav-family{
+  font-family: "Mochiy Pop One", sans-serif;
+}
+.poppin{
+  font-family: 'Poppins', sans-serif;
+}
+
