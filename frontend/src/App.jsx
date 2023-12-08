@@ -1,4 +1,5 @@
 import { AllRoutes } from "./Routes/AllRoutes";
+import { Footer } from "./components/Footer";
 import { Navbar } from "./components/Navbar";
 
 const App = () => {
@@ -8,6 +9,7 @@ const App = () => {
       <div className="container mx-auto">
         <AllRoutes />
       </div>
+      <Footer/>
     </div>
   );
 };

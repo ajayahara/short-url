@@ -1,8 +1,8 @@
 export const Home = () => {
   return (
-    <div className="w-full h-[90vh] flex justify-center items-center text-white poppin">
+    <div className="w-full h-screen flex justify-center items-center text-white">
       <form className="w-1/2 px-8 py-6 pb-4 shadow-xl border border-gray-600 rounded-lg">
-        <div className="capitalize text-center text-2xl mb-2">
+        <div className="text-center text-3xl mb-8">
           <h1 className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-purple-500 bg-blend-color">
             Create your short url
           </h1>
@@ -48,8 +48,9 @@ export const Home = () => {
         </div>
         <div className="mt-4 flex justify-end items-center">
           <input
+            value='Generate'
             type="submit"
-            className="px-6 py-[.4rem] cursor-pointer bg-gradient-to-r from-indigo-500 via-purple-500 to-purple-500 rounded-md"
+            className="px-5 py-2 cursor-pointer bg-gradient-to-r from-indigo-500 via-purple-500 to-purple-500 rounded-md"
           />
         </div>
       </form>
