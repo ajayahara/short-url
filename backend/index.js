@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express=require('express');
 const cors=require('cors');
-const morgan=require('morgan')
+// const morgan=require('morgan')
 // Config import 
 const {connection}=require('./config/db')
 // Routes import
@@ -15,7 +15,7 @@ const app=express();
 const PORT=process.env.PORT||3000
 
 // Middleware usage
-app.use(morgan)
+// app.use(morgan('default'))
 app.use(cors());
 app.use(express.json());
 

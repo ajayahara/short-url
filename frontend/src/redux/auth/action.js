@@ -7,7 +7,7 @@ const loginPostRequest = () => {
 const loginPostError = (errorMessage) => {
   return { type: types.LOGIN_POST_ERROR, payload: errorMessage };
 };
-const auhPostSuccess = (token) => {
+const loginPostSuccess = (token) => {
   return { type: types.LOGIN_POST_SUCCESS, payload: token };
 };
 const registerPostRequest = () => {
@@ -16,7 +16,7 @@ const registerPostRequest = () => {
 const registerPostError = (errorMessage) => {
   return { type: types.REGISTER_POST_ERROR, payload: errorMessage };
 };
-const registerPostSuccess = (token) => {
+const registerPostSuccess = () => {
   return { type: types.REGISTER_POST_SUCCESS };
 };
 const loginLogout = () => {
@@ -27,18 +27,24 @@ const loginPost = (formData) => async (dispatch) => {
   dispatch(loginPostRequest());
   try {
     const resonse = await axios.post(`${server}/auth/login`, formData);
-    console.log(resonse);
+    dispatch(loginPostSuccess(resonse.data))
   } catch (error) {
-    console.log(error);
+    dispatch(loginPostError(error.response.data?.message||error.response.data?.error||'Server Connection Error'))
   }
 };
-const registerPost = (formData) => async (dispatch) => {
+const registerPost = (formData) =>async (dispatch) => {
     dispatch(registerPostRequest());
     try {
-      const resonse = await axios.post(`${server}/auth/login`, formData);
-      console.log(resonse);
+      const response=await axios.post(`${server}/auth/register`, formData);
+      if(response?.status==200){
+        alert('User Already Exist');
+      }
+      if(response?.status==201){
+        alert('User registration SuccessFull')
+      }
+      dispatch(registerPostSuccess())
     } catch (error) {
-      console.log(error);
+      dispatch(registerPostError(error.response.data?.message||error.response.data?.error||'Server Connection Error'))
     }
   };
 const logOut=()=>(dispatch)=>{

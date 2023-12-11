@@ -19,9 +19,7 @@ const userRegistration = async (req, res) => {
     return res.status(400).json({message:'UserName must be 6 to 10 letters'});
   };
   try {
-    const isUserExist = await UserModel.findOne({
-      $or: [{ userName }, { email }],
-    });
+    const isUserExist = await UserModel.findOne({email});
     if (isUserExist) {
       return res.status(200).json({ message: "User already exists" });
     }
@@ -30,6 +28,7 @@ const userRegistration = async (req, res) => {
     await newUser.save();
     return res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: "Error while registering" });
   }
 };
@@ -48,7 +47,7 @@ const userLogin = async (req, res) => {
         return res.status(401).json({ message: 'Invalid credential' });
     }
     const token=jwt.sign({userId:user._id},process.env.SECRETKEY,{expiresIn:'3d'});
-    return res.status(200).json({token});
+    return res.status(200).json({token,userName:user.userName});
   } catch (error) {
     return res.status(500).json({ error: "Error while login" });
   }
