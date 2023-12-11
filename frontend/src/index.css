@@ -20,3 +20,6 @@ textarea {
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
+.color-text{
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-purple-500 bg-blend-color
+}

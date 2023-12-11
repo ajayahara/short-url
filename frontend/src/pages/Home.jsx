@@ -3,7 +3,7 @@ export const Home = () => {
     <div className="w-full h-screen flex justify-center items-center text-white">
       <form className="w-1/2 px-8 py-6 pb-4 shadow-xl border border-gray-600 rounded-lg">
         <div className="text-center text-3xl mb-8">
-          <h1 className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-purple-500 bg-blend-color">
+          <h1 className="color-text">
             Create your short url
           </h1>
         </div>

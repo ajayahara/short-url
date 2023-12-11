@@ -34,12 +34,12 @@ const userRegistration = async (req, res) => {
   }
 };
 const userLogin = async (req, res) => {
-    const { userName, password } = req.body;
-    if (!userName || !password) {
+    const { email, password } = req.body;
+    if (!email || !password) {
       return res.status(400).json({ message: "Some fields are missing" });
     }
   try {
-    const user = await UserModel.findOne({userName});
+    const user = await UserModel.findOne({email});
     if(!user){
         return res.status(401).json({ message: 'User did not exist' });
     }

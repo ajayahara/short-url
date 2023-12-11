@@ -25,7 +25,7 @@ export const Login = () => {
   return (
     <div className="w-full h-[100vh] flex justify-center items-center text-white">
       <form className="w-1/3 px-8 py-6 pb-4 shadow-xl border border-gray-600 rounded-lg">
-        <h1 className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-purple-500 bg-blend-color text-center text-xl mb-4">
+        <h1 className="color-text text-center text-xl mb-4">
           Login
         </h1>
         <div className="grid grid-cols-1 gap-2">
@@ -69,7 +69,7 @@ export const Login = () => {
         </div>
         <p className="mt-4 text-gray-600 text-center">
           Don &apos;t have an account?{" "}
-          <Link to="/register" className="text-indigo-500 hover:underline bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-purple-500 bg-blend-color">
+          <Link to="/register" className="text-indigo-500 hover:underline color-text">
             Register here.
           </Link>
         </p>
