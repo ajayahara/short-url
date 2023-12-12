@@ -1,11 +1,12 @@
 import * as types from './actionType.js'
+const {token,userName}=JSON.parse(localStorage.getItem('user'))||{};
 const initialState={
     isLoginLoading:false,
     isLoginError:false,
     errorLoginMessage:null,
-    isLoggedin:false,
-    token:null,
-    userName:null,
+    isLoggedin:token?true:false,
+    token:token||null,
+    userName:userName||null,
     isRegisterLoading:false,
     isRegisterError:false,
     errorRegisterMessaage:null
@@ -20,7 +21,7 @@ export const reducer=(state=initialState,action)=>{
         case types.LOGIN_POST_SUCCESS:
             return {...state,isLoginLoading:false,isLoginError:false,errorLoginMessage:null,token:payload.token,userName:payload.userName,isLoggedin:true};
         case types.LOGIN_LOGOUT:
-            return {...initialState};
+            return {...state,...initialState,isLoggedin:false,token:null,userName:null};
         case types.REGISTER_POST_REQUEST:
             return {...state,isRegisterLoading:true,isRegisterError:false,errorRegisterMessaage:null};
         case types.REGISTER_POST_ERROR:

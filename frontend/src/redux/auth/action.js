@@ -26,8 +26,9 @@ const loginLogout = () => {
 const loginPost = (formData) => async (dispatch) => {
   dispatch(loginPostRequest());
   try {
-    const resonse = await axios.post(`${server}/auth/login`, formData);
-    dispatch(loginPostSuccess(resonse.data))
+    const response = await axios.post(`${server}/auth/login`, formData);
+    dispatch(loginPostSuccess(response.data));
+    localStorage.setItem('user',JSON.stringify(response.data));
   } catch (error) {
     dispatch(loginPostError(error.response.data?.message||error.response.data?.error||'Server Connection Error'))
   }
@@ -48,6 +49,7 @@ const registerPost = (formData) =>async (dispatch) => {
     }
   };
 const logOut=()=>(dispatch)=>{
-    dispatch(loginLogout())
-}
+    localStorage.removeItem('user');
+    dispatch(loginLogout());
+};
 export { loginPost,logOut,registerPost };
