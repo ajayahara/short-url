@@ -1,19 +1,27 @@
 import  { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { generateShortUrl } from '../redux/url/action';
+import {format,addDays} from 'date-fns'
+const getTodayDate=()=>{
+  const date=new Date();
+  const today=format(date,'yyyy-MM-dd');
+  const tommorow=format(addDays(date,1),'yyyy-MM-dd');
 
+  return {today,tommorow};
+}
 const initialFormData = {
-  originalUrl: 'https://chat.openai.com/c/9a81af78-f858-4ba9-a981-1867cbcfbd1a',
-  title: 'Chat Gpt Conversation ',
+  originalUrl: '',
+  title: '',
   startDate: '',
   expireDate: '',
-  description: 'Redirect you to the redux conversation',
+  description: '',
 };
 
 export const Home = () => {
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState(initialFormData);
+  const [date]=useState(getTodayDate());
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,6 +77,7 @@ export const Home = () => {
               type="date"
               name="startDate"
               required
+              min={date.today}
               value={formData.startDate}
               onChange={handleChange}
               className="border border-gray-600 p-2 rounded-lg"
@@ -81,6 +90,7 @@ export const Home = () => {
               type="date"
               name="expireDate"
               required
+              min={date.tommorow}
               value={formData.expireDate}
               onChange={handleChange}
               className="border border-gray-600 p-2 rounded-lg"

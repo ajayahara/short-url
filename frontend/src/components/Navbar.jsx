@@ -34,6 +34,16 @@ export const Navbar = () => {
             </li>
             <li className="color-text">
               <Link
+                to={"/all"}
+                className={`px-2 pb-1 rounded-md ${
+                  pathname == "/all" ? "border-b-2 border-purple-700" : ""
+                }`}
+              >
+                All-url
+              </Link>
+            </li>
+            <li className="color-text">
+              <Link
                 to={"/about"}
                 className={`px-2 pb-1 ${
                   pathname == "/about" ? "border-b-2 border-purple-700" : ""

@@ -23,3 +23,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .color-text{
   @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-purple-500 bg-blend-color
 }
+.sroll-bar::-webkit-scrollbar{
+  display: none;
+}
+/* .sroll-bar::-webkit-scrollbar-track {
+  @apply bg-gray-900;
+}
+.sroll-bar::-webkit-scrollbar-thumb {
+  @apply bg-gray-800 rounded-full;
+} */

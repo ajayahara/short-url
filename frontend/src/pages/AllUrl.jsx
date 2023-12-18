@@ -1,200 +1,56 @@
-const demoData = [
-  {
-    originalUrl: "https://example.com/page1",
-    shortId: "abc123",
-    userId: "user123",
-    title: "Demo Page 1",
-    description: "This is a demo page.",
-    status: "active",
-    startDate: new Date(),
-    expireDate: new Date("2023-12-31"),
-    stats: {
-      totalVisitors: 100,
-      uniqueVisitors: 80,
-    },
-  },
-  {
-    originalUrl: "https://example.com/page2",
-    shortId: "def456",
-    userId: "user456",
-    title: "Demo Page 2",
-    description: "Another demo page.",
-    status: "active",
-    startDate: new Date(),
-    expireDate: new Date("2023-12-31"),
-    stats: {
-      totalVisitors: 120,
-      uniqueVisitors: 90,
-    },
-  },
-  {
-    originalUrl: "https://example.com/page2",
-    shortId: "def456",
-    userId: "user456",
-    title: "Demo Page 2",
-    description: "Another demo page.",
-    status: "active",
-    startDate: new Date(),
-    expireDate: new Date("2023-12-31"),
-    stats: {
-      totalVisitors: 120,
-      uniqueVisitors: 90,
-    },
-  },
-  {
-    originalUrl: "https://example.com/page2",
-    shortId: "def456",
-    userId: "user456",
-    title: "Demo Page 2",
-    description: "Another demo page.",
-    status: "active",
-    startDate: new Date(),
-    expireDate: new Date("2023-12-31"),
-    stats: {
-      totalVisitors: 120,
-      uniqueVisitors: 90,
-    },
-  },
-  {
-    originalUrl: "https://example.com/page1",
-    shortId: "abc123",
-    userId: "user123",
-    title: "Demo Page 1",
-    description: "This is a demo page.",
-    status: "active",
-    startDate: new Date(),
-    expireDate: new Date("2023-12-31"),
-    stats: {
-      totalVisitors: 100,
-      uniqueVisitors: 80,
-    },
-  },
-  {
-    originalUrl: "https://example.com/page2",
-    shortId: "def456",
-    userId: "user456",
-    title: "Demo Page 2",
-    description: "Another demo page.",
-    status: "active",
-    startDate: new Date(),
-    expireDate: new Date("2023-12-31"),
-    stats: {
-      totalVisitors: 120,
-      uniqueVisitors: 90,
-    },
-  },
-  {
-    originalUrl: "https://example.com/page2",
-    shortId: "def456",
-    userId: "user456",
-    title: "Demo Page 2",
-    description: "Another demo page.",
-    status: "active",
-    startDate: new Date(),
-    expireDate: new Date("2023-12-31"),
-    stats: {
-      totalVisitors: 120,
-      uniqueVisitors: 90,
-    },
-  },
-  {
-    originalUrl: "https://example.com/page2",
-    shortId: "def456",
-    userId: "user456",
-    title: "Demo Page 2",
-    description: "Another demo page.",
-    status: "active",
-    startDate: new Date(),
-    expireDate: new Date("2023-12-31"),
-    stats: {
-      totalVisitors: 120,
-      uniqueVisitors: 90,
-    },
-  },
-  {
-    originalUrl: "https://example.com/page1",
-    shortId: "abc123",
-    userId: "user123",
-    title: "Demo Page 1",
-    description: "This is a demo page.",
-    status: "active",
-    startDate: new Date(),
-    expireDate: new Date("2023-12-31"),
-    stats: {
-      totalVisitors: 100,
-      uniqueVisitors: 80,
-    },
-  },
-  {
-    originalUrl: "https://example.com/page2",
-    shortId: "def456",
-    userId: "user456",
-    title: "Demo Page 2",
-    description: "Another demo page.",
-    status: "active",
-    startDate: new Date(),
-    expireDate: new Date("2023-12-31"),
-    stats: {
-      totalVisitors: 120,
-      uniqueVisitors: 90,
-    },
-  },
-];
-
-import { useState, useEffect } from "react";
-import {
-  CopyIcon,
-  InfoCircledIcon,
-  Pencil2Icon,
-  TrashIcon,
-} from "@radix-ui/react-icons";
+import { useEffect, useState } from "react";
+import {useSearchParams} from "react-router-dom"
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { getAllUrls } from "../redux/url/action";
+import { UrlRow } from "../components/UrlRow";
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 
 export const AllUrl = () => {
-  const [allUrls, setAllUrls] = useState(demoData);
-
-  useEffect(() => {
-    // Fetch all URLs from your API or backend
-    // You might want to use a library like axios or fetch for API requests
-    const fetchAllUrls = async () => {
-      // try {
-      //   const response = await fetch('/api/all-urls'); // Replace with your actual API endpoint
-      //   const data = await response.json();
-      //   setAllUrls(data);
-      // } catch (error) {
-      //   console.error('Error fetching URLs', error);
-      // }
+  const dispatch = useDispatch();
+  const { urls } = useSelector((store) => {
+    const { isUrlsLoading, isUrlsError, errorUrlsMessage, urls } =
+      store.urlReducer;
+    return {
+      loading: isUrlsLoading,
+      error: isUrlsError,
+      message: errorUrlsMessage,
+      urls: urls,
     };
-
-    fetchAllUrls();
-  }, []); // Runs once on component mount
-
-  const handleCopyClick = (url) => {
-    // Implement the logic to copy the URL
-    console.log(`Copying URL: ${url}`);
-  };
-
-  const handleDetailsClick = (urlId) => {
-    // Implement the logic to navigate to details page or show a modal
-    console.log(`View details for URL with ID: ${urlId}`);
-  };
+  }, shallowEqual);
+  const [searchParams,setSearchParams]=useSearchParams()
+  const [page, setPage] = useState(parseInt(searchParams.get('page')) || 1);
 
   const handleEditClick = (urlId) => {
-    // Implement the logic to navigate to the edit page or show a form
     console.log(`Edit URL with ID: ${urlId}`);
   };
 
   const handleDeleteClick = (urlId) => {
-    // Implement the logic to delete the URL
     console.log(`Delete URL with ID: ${urlId}`);
   };
-
+  useEffect(()=>{
+    setSearchParams({page});
+  },[page,setSearchParams]);
+  useEffect(() => {
+    dispatch(getAllUrls(page));
+  }, [dispatch,page]);
   return (
-    <div className="p-4 h-screen flex flex-col justify-center items-center">
-      <h1 className="text-2xl font-semibold mb-4 text-center color-text">
-        Generated short urls
-      </h1>
-      <div className="w-full border border-gray-700 shadow-lg rounded-lg">
-        <table className="min-w-full text-center overflow-hidden">
+    <div className="p-4 mt-10 min-h-[90vh]">
+      <section className="border border-gray-700 p-6 rounded mt-4">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-semibold mb-2 color-text inline-block">
+            Generated short urls :
+          </h2>
+          <div className="flex items-center gap-2">
+            <button disabled={page==1} onClick={()=>setPage(pre=>pre-1)} className="text-green-500 disabled:text-gray-700 hover:underline border p-1 border-gray-700">
+              <ChevronLeftIcon className="w-4 h-4 font-bold" />
+            </button>
+            <button className="text-white hover:underline">{page}</button>
+            <button disabled={urls.length<10} onClick={()=>setPage(pre=>pre+1)} className="text-green-500 disabled:text-gray-700 hover:underline border p-1 border-gray-700">
+              <ChevronRightIcon className="w-4 h-4 font-bold" />
+            </button>
+          </div>
+        </div>
+        <table className="w-full text-center overflow-hidden">
           <thead className="border-b border-gray-600">
             <tr className="bg-gray-900 color-text">
               <th className="py-2 px-4">Sl No</th>
@@ -207,50 +63,22 @@ export const AllUrl = () => {
               <th className="py-2 px-4">Delete</th>
             </tr>
           </thead>
-          <tbody className="min-h-screen text-white">
-            {allUrls.map((url, index) => (
-              <tr key={index} className="even:bg-gray-900">
-                <td className="py-2 px-4">{index + 1}</td>
-                <td className="py-2 px-4">{url.title}</td>
-                <td className="py-2 px-4">{url.status}</td>
-                <td className="py-2 px-4">{url.shortId}</td>
-                <td className="py-2 px-4">
-                  <button
-                    onClick={() => handleCopyClick(url.originalUrl)}
-                    className="text-blue-500 hover:underline"
-                  >
-                    <CopyIcon />
-                  </button>
-                </td>
-                <td className="py-2 px-4">
-                  <button
-                    onClick={() => handleDetailsClick(url._id)}
-                    className="text-green-500 hover:underline"
-                  >
-                    <InfoCircledIcon />
-                  </button>
-                </td>
-                <td className="py-2 px-4">
-                  <button
-                    onClick={() => handleEditClick(url._id)}
-                    className="text-yellow-500 hover:underline"
-                  >
-                    <Pencil2Icon />
-                  </button>
-                </td>
-                <td className="py-2 px-4">
-                  <button
-                    onClick={() => handleDeleteClick(url._id)}
-                    className="text-red-500 hover:underline"
-                  >
-                    <TrashIcon />
-                  </button>
-                </td>
-              </tr>
-            ))}
+          <tbody className="text-white">
+            {urls.map((url, index) => {
+              return (
+                <UrlRow
+                  key={index}
+                  page={page}
+                  index={index}
+                  url={url}
+                  handleDeleteClick={handleDeleteClick}
+                  handleEditClick={handleEditClick}
+                />
+              );
+            })}
           </tbody>
         </table>
-      </div>
+      </section>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import * as types from "./actionTypes";
 const initialState = {
-  isToBeRedirected: false,
+  genUrl:null,
   isGenerateLoading: false,
   isGenerateError: false,
   errorGenerateMessage: null,
@@ -53,7 +53,7 @@ export const reducer = (state = initialState, action) => {
         isGenerateLoading: false,
         isGenerateError: false,
         errorGenerateMessage: null,
-        isToBeRedirected: true,
+        genUrl:payload.newUrl
       };
 
     // URLS_GET cases
