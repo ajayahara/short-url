@@ -1,5 +1,6 @@
 const express = require("express");
-const { authorization } = require("../middleware/authorize.middleware");
+const { authorization } = require("../middleware/authorize.middleware.js");
+const {paginationMiddleware}=require("../middleware/pagination.middleware.js");
 const {
   createShortUrl,
   getAllShortedUrl,
@@ -11,7 +12,7 @@ const urlRouter = express.Router();
 
 urlRouter.use(authorization);
 urlRouter.post("/create",createShortUrl);
-urlRouter.get("/get/all",getAllShortedUrl);
+urlRouter.get("/get/all",paginationMiddleware,getAllShortedUrl);
 urlRouter.get("/get/:id",getShortedUrlById);
 urlRouter.patch("/modify/:id",modifyShortedUrlById);
 urlRouter.delete("/delete/:id",deleteShortedUrlById);

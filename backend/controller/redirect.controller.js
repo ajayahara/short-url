@@ -10,6 +10,13 @@ const redirectUrl=async (req,res)=>{
         if(!shortUrl){
             return res.status(400).json({message:'No short url found with this shortid'});
         }
+        const currentDate = new Date();
+        if (currentDate > shortUrl.expireDate) {
+            if (shortUrl.status !== 'expired') {
+                await UrlModel.findByIdAndUpdate(shortUrl._id, { status: 'expired' });
+            }
+            return res.status(400).json({ message: 'URL expired' });
+        }
         let updatedStats={
             totalVisitors:shortUrl.stats.totalVisitors,
             uniqueVisitors:shortUrl.stats.uniqueVisitors

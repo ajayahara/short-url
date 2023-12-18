@@ -42,8 +42,9 @@ const createShortUrl = async (req, res) => {
 };
 const getAllShortedUrl = async (req, res) => {
   const userId = req.userId;
+  const { skip, limit, order } = req.pagination;
   try {
-    const shortUrls = await UrlModel.find({ userId });
+    const shortUrls = await UrlModel.find({ userId }).skip(skip).limit(limit).sort({createdAt:order});
     return res.status(201).json({ shortUrls });
   } catch (error) {
     console.log(error);
@@ -110,8 +111,10 @@ const deleteShortedUrlById = async (req, res) => {
         .json({ message: "No short url found with this id" });
     }
     await UrlModel.findByIdAndDelete(id);
-    await VisitorsModel.deleteMany({urlId:new mongoose.Types.ObjectId(id)});
-    return res.status(200).json({ message: "Short url along with visitors deleted" });
+    await VisitorsModel.deleteMany({ urlId: new mongoose.Types.ObjectId(id) });
+    return res
+      .status(200)
+      .json({ message: "Short url along with visitors deleted" });
   } catch (error) {
     console.log(error);
     return res
