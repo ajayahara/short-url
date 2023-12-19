@@ -21,7 +21,6 @@ const createShortUrl = async (req, res) => {
   }
   try {
     const shortId = shortid.generate();
-    console.log(shortId);
     const newUrl = new UrlModel({
       originalUrl,
       userId,

@@ -21,7 +21,7 @@ const redirectUrl=async (req,res)=>{
             totalVisitors:shortUrl.stats.totalVisitors,
             uniqueVisitors:shortUrl.stats.uniqueVisitors
         }
-        const visitor=await VisitorsModel.findOne({ipAdress:ip});
+        const visitor=await VisitorsModel.findOne({ipAddress:ip,urlId:shortUrl._id});
         if(!visitor){
             updatedStats.uniqueVisitors++;
         }
