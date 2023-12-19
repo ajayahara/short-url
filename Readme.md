@@ -22,9 +22,9 @@ Your URL Shortener App is a web application that allows users to shorten long UR
 4. [Contributing](#contributing)
 5. [License](#license)
 
-## Getting Started
+# Getting Started
 
-### Cloning the Repository
+## Cloning the Repository
 
 To get started, clone the repository to your local machine:
 
@@ -53,7 +53,8 @@ Create a `.env` file in the `backend` directory with the following variables:
 
 ```env
 PORT=3001
-MONGODB_URI=your-mongodb-uri
+URI=your-mongodb-uri
+SECRETKEY='your-secret-key'
 ```
 
 #### Running the Backend
@@ -66,7 +67,7 @@ pnpm dev
 #### Installation
 
 ```bash
-# Navigate to the backend directory
+# Navigate to the frontend directory
 cd frontend
 # Install dependencies
 pnpm install
@@ -85,7 +86,283 @@ VITE_SERVER=http://localhost:3001
 # Start the developement server
 pnpm dev
 ```
-## API Documentation
+# API Documentation
+## Authentication API
+
+The Authentication API provides endpoints for user registration and login.
+
+### 1. Register a New User
+
+### Endpoint: `POST auth/register`
+
+Register a new user with the provided details.
+
+#### Request
+
+- **Method:** `POST`
+- **URL:** `auth/register`
+- **Headers:**
+  - Content-Type: application/json
+- **Body:**
+  - `userName` (string, required): User's username.
+  - `email` (string, required): User's email address.
+  - `password` (string, required): User's password.
+
+#### Response
+
+- **Status Code:** 201 Created
+- **Body:**
+  ```json
+  {
+    "message": "User registered successfully"
+  }
+  ```
+### 2. Login User
+
+### Endpoint: `POST auth/login`
+
+Login an existing user with the provided email and password.
+
+#### Request
+
+- **Method:** `POST`
+- **URL:** `auth/login`
+- **Headers:**
+  - Content-Type: application/json
+- **Body:**
+  - `email` (string, required): User's email address.
+  - `password` (string, required): User's password.
+
+#### Response
+
+- **Status Code:** 200 OK
+- **Body:**
+  ```json
+  {
+    "token": "generated-jwt-token",
+    "userName": "user-username"
+  }
+  ```
+### Error Responses
+
+- **400 Bad Request:**
+  - If some fields are missing or invalid.
+
+- **401 Unauthorized:**
+  - If the user does not exist or invalid credentials.
+
+- **500 Internal Server Error:**
+  - If there's an error during registration or login.
+
+## URL API 
+
+### 1. Create Short URL
+
+### Endpoint: `POST url/create`
+
+Create a new short URL with the provided information.
+
+#### Request
+
+- **Method:** `POST`
+- **URL:** `url/create`
+- **Headers:**
+  - Authorization Token: Bearer `<Your_JWT_Token>`
+  - Content-Type: application/json
+- **Body:**
+  - `originalUrl` (string, required): Original URL to be shortened.
+  - `title` (string, required): Title for the short URL.
+  - `description` (string, required): Description for the short URL.
+  - `startDate` (string): Start date for the short URL (optional).
+  - `expireDate` (string, required): Expiration date for the short URL.
+
+#### Response
+
+- **Status Code:** 201 Created
+- **Body:**
+  ```json
+  {
+    "newUrl": {
+      "_id": "generated-url-id",
+      "originalUrl": "original-url",
+      "userId": "user-id",
+      "title": "short-url-title",
+      "description": "short-url-description",
+      "startDate": "start-date",
+      "expireDate": "expire-date",
+      "shortId": "generated-short-id",
+      "createdAt": "timestamp",
+      "updatedAt": "timestamp"
+    }
+  }
+  ```
+### Error Responses
+
+- **400 Bad Request:**
+  - If some fields are missing or invalid.
+
+- **500 Internal Server Error:**
+  - If there's an error during the URL creation.
+### 2. Get All Shortened URLs
+
+### Endpoint: `GET url/get/all`
+
+Retrieve a paginated list of all shortened URLs for the authenticated user.
+
+#### Request
+
+- **Method:** `GET`
+- **URL:** `url/get/all`
+- **Headers:**
+  - Authorization Token: Bearer `<Your_JWT_Token>`
+- **Query Parameters:**
+  - `page` (integer): Page number for pagination (optional, default: 1).
+  - `limit` (integer): Number of items per page (optional, default: 10).
+  - `order` (string): Sort order for items (optional, default: "desc").
+
+#### Response
+
+- **Status Code:** 200 OK
+- **Body:**
+  ```json
+  {
+    "shortUrls": [
+      {
+        "_id": "url-id-1",
+        "originalUrl": "original-url-1",
+        "userId": "user-id",
+        "title": "short-url-title-1",
+        "description": "short-url-description-1",
+        "startDate": "start-date-1",
+        "expireDate": "expire-date-1",
+        "shortId": "generated-short-id-1",
+        "createdAt": "timestamp-1",
+        "updatedAt": "timestamp-1"
+      },
+      // Additional short URLs...
+    ]
+  }
+  ```
+### Error Responses
+
+- **500 Internal Server Error:**
+  - If there's an error during the retrieval of shortened URLs.
+
+### 3. Get Shortened URL by ID
+
+### Endpoint: `GET url/get/:id`
+
+Retrieve details of a specific shortened URL by its ID for the authenticated user.
+
+#### Request
+
+- **Method:** `GET`
+- **URL:** `url/get/:id`
+- **Headers:**
+  - Authorization Token: Bearer `<Your_JWT_Token>`
+- **URL Parameters:**
+  - `id` (string): ID of the shortened URL to retrieve.
+
+#### Response
+
+- **Status Code:** 200 OK
+- **Body:**
+  ```json
+  {
+    "shortUrl": {
+      "_id": "url-id",
+      "originalUrl": "original-url",
+      "userId": "user-id",
+      "title": "short-url-title",
+      "description": "short-url-description",
+      "startDate": "start-date",
+      "expireDate": "expire-date",
+      "shortId": "generated-short-id",
+      "createdAt": "timestamp",
+      "updatedAt": "timestamp"
+    }
+  }
+  ```
+### Error Responses
+
+- **400 Bad Request:**
+  - If the provided ID is invalid.
+
+- **500 Internal Server Error:**
+  - If there's an error during the retrieval of the shortened URL.
+### 4. Modify Shortened URL by ID
+
+### Endpoint: `PATCH url/modify/:id`
+
+Modify details of a specific shortened URL by its ID for the authenticated user.
+
+#### Request
+
+- **Method:** `PATCH`
+- **URL:** `url/modify/:id`
+- **Headers:**
+  - Authorization Token: Bearer `<Your_JWT_Token>`
+  - Content-Type: application/json
+- **URL Parameters:**
+  - `id` (string): ID of the shortened URL to modify.
+- **Body:**
+  ```json
+  {
+    "title": "new-title",
+    "description": "new-description",
+    "expireDate": "new-expire-date"
+  }
+  ```
+  #### Response
+
+- **Status Code:** 200 OK
+- **Body:**
+  ```json
+  {
+  "message": "Shortened URL updated"
+  }
+  ```
+### Error Responses
+
+- **400 Bad Request:**
+  - If the provided ID is invalid.
+
+- **500 Internal Server Error:**
+  - If there's an error during the retrieval of the shortened URL.
+
+### 5. Delete Shortened URL by ID
+
+### Endpoint: `DELETE url/delete/:id`
+
+Delete a specific shortened URL by its ID for the authenticated user.
+
+#### Request
+
+- **Method:** `DELETE`
+- **URL:** `url/delete/:id`
+- **Headers:**
+  - Authorization Token: Bearer `<Your_JWT_Token>`
+- **URL Parameters:**
+  - `id` (string): ID of the shortened URL to delete.
+
+#### Response
+
+- **Status Code:** 200 OK
+- **Body:**
+  ```json
+  {
+    "message": "Shortened URL along with visitors deleted"
+  }
+  ```
+
+### Error Responses
+
+- **400 Bad Request:**
+  - If the provided ID is invalid.
+
+- **500 Internal Server Error:**
+  - If there's an error during the retrieval of the shortened URL.
+
 ## Frontend Documentation
 ## Contributing
 
