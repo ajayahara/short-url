@@ -25,7 +25,7 @@ export const Navbar = () => {
             <li className="color-text">
               <Link
                 to={"/"}
-                className={`px-2 pb-1 ${
+                className={`px-2 pb-1 rounded-md ${
                   pathname == "/" ? "border-b-2 border-purple-700" : ""
                 }`}
               >
@@ -45,7 +45,7 @@ export const Navbar = () => {
             <li className="color-text">
               <Link
                 to={"/about"}
-                className={`px-2 pb-1 ${
+                className={`px-2 pb-1 rounded-md ${
                   pathname == "/about" ? "border-b-2 border-purple-700" : ""
                 }`}
               >
@@ -56,7 +56,7 @@ export const Navbar = () => {
               {!isLoggedin ? (
                 <Link
                   to={"/register"}
-                  className={`px-2 pb-1 ${
+                  className={`px-2 pb-1 rounded-md ${
                     pathname == "/register"
                       ? "border-b-2 border-purple-700"
                       : ""
@@ -76,7 +76,7 @@ export const Navbar = () => {
               {!isLoggedin ? (
                 <Link
                   to={"/login"}
-                  className={`px-2 pb-1 ${
+                  className={`px-2 pb-1 rounded-md ${
                     pathname == "/login" ? "border-b-2 border-purple-700" : ""
                   }`}
                 >

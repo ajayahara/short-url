@@ -55,7 +55,11 @@ export const reducer = (state = initialState, action) => {
         errorGenerateMessage: null,
         genUrl:payload.newUrl
       };
-
+    case types.CLEAR_GENURL:
+      return {
+        ...state,
+        genUrl:null
+      }
     // URLS_GET cases
     case types.URLS_GET_REQUEST:
       return {

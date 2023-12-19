@@ -1,25 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { detailsOfShortUrl } from "../redux/url/action";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { CopyIcon } from "@radix-ui/react-icons";
+import { CopyButton } from "./IconButton";
 
-const server = import.meta.env.VITE_SERVER;
+import {server} from '../utils/environment.js'
 
 export const UrlDetailsCard = () => {
   const { id } = useParams();
-  const [copied, setCopied] = useState(false);
   const { urlDetails } = useSelector((store) => {
     return { urlDetails: store.urlReducer.urlDetails };
   }, shallowEqual);
   const dispatch = useDispatch();
-  const handleCopy = () => {
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 5000);
-  };
+
   useEffect(() => {
     dispatch(detailsOfShortUrl(id));
   }, [id, dispatch]);
@@ -45,7 +38,10 @@ export const UrlDetailsCard = () => {
             </span>
           </div>
           <div className="flex flex-col">
-            <span className="color-text">Original URL:</span>
+            <div className="flex justify-between items-center">
+              <span className="color-text">Original URL:</span>
+              <CopyButton text={urlDetails.originalUrl} />
+            </div>
             <span className="break-words h-12 sroll-bar overflow-y-scroll">
               {urlDetails.originalUrl}
             </span>
@@ -53,15 +49,7 @@ export const UrlDetailsCard = () => {
           <div className="flex flex-col">
             <div className="flex justify-between items-center">
               <span className="color-text">Short ID:</span>
-              <CopyToClipboard
-                onCopy={copied ? () => {} : handleCopy}
-                text={`${server}/${urlDetails.shortId}`}
-                className="text-blue-500 hover:underline"
-              >
-                <button>
-                  <CopyIcon />
-                </button>
-              </CopyToClipboard>
+              <CopyButton text={`${server}/${urlDetails.shortId}`} />
             </div>
             <span>{urlDetails.shortId}</span>
           </div>

@@ -1,6 +1,6 @@
 import * as types from "./actionTypes.js";
 import axios from "axios";
-const server = import.meta.env.VITE_SERVER;
+import {server} from '../../utils/environment.js'
 // Action Objects
 const generatePostRequest = () => {
   return { type: types.GENERATE_POST_REQUEST };
@@ -11,7 +11,9 @@ const generatePostError = ({ message }) => {
 const generatePostSuccess = ({newUrl}) => {
   return { type: types.GENERATE_POST_SUCCESS,payload:{newUrl} };
 };
-
+const clearGenUrl=()=>{
+  return {type:types.CLEAR_GENURL}
+}
 const urlsGetRequest = () => {
   return { type: types.URLS_GET_REQUEST };
 };
@@ -22,25 +24,25 @@ const urlsGetSuccess = ({urls}) => {
   return { type: types.URLS_GET_SUCCESS,payload:{urls} };
 };
 
-// const urlsEditRequest = () => {
-//   return { type: types.URLS_EDIT_REQUEST };
-// };
-// const urlsEditError = ({ message }) => {
-//   return { type: types.URLS_EDIT_ERROR, payload: { message } };
-// };
-// const urlsEditSuccess = () => {
-//   return { type: types.URLS_EDIT_SUCCESS };
-// };
+const urlsEditRequest = () => {
+  return { type: types.URLS_EDIT_REQUEST };
+};
+const urlsEditError = ({ message }) => {
+  return { type: types.URLS_EDIT_ERROR, payload: { message } };
+};
+const urlsEditSuccess = () => {
+  return { type: types.URLS_EDIT_SUCCESS };
+};
 
-// const urlsDeleteRequest = () => {
-//   return { type: types.URLS_DELETE_REQUEST };
-// };
-// const urlsDeleteError = ({ message }) => {
-//   return { type: types.URLS_DELETE_ERROR, payload: { message } };
-// };
-// const urlsDeleteSuccess = () => {
-//   return { type: types.URLS_DELETE_SUCCESS };
-// };
+const urlsDeleteRequest = () => {
+  return { type: types.URLS_DELETE_REQUEST };
+};
+const urlsDeleteError = ({ message }) => {
+  return { type: types.URLS_DELETE_ERROR, payload: { message } };
+};
+const urlsDeleteSuccess = () => {
+  return { type: types.URLS_DELETE_SUCCESS };
+};
 
 const detailsGetRequest = () => {
   return { type: types.DETAILS_GET_REQUEST };
@@ -83,6 +85,9 @@ const generateShortUrl = (formData) => async (dispatch,getState) => {
     dispatch(generatePostError({message:error||message||'Error In Server'}));
   }
 };
+const clearGeneratedUrl=()=>(dispatch)=>{
+  dispatch(clearGenUrl())
+}
 
 const getAllUrls = (page) =>async (dispatch,getState) => {
   const token=getState().authReducer.token;
@@ -96,9 +101,29 @@ const getAllUrls = (page) =>async (dispatch,getState) => {
   }
 };
 
-const editShortUrl = (formData) => (dispatch) => {};
+const editShortUrl = (id,formData) =>async (dispatch,getState) => {
+  const token=getState().authReducer.token;
+  try {
+    dispatch(urlsEditRequest());
+    await axios.patch(`${server}/url/modify/${id}`, formData,axiosConfig(token));
+    dispatch(urlsEditSuccess());
+  } catch (err) {    
+    const {error,message}=err.response.data;
+    dispatch(urlsEditError({message:error||message||'Error In Server'}));
+  }
+};
 
-const deleteShortUrl = (id) => (dispatch) => {};
+const deleteShortUrl = (id) =>async (dispatch,getState) => {
+  const token=getState().authReducer.token;
+  try {
+    dispatch(urlsDeleteRequest());
+    await axios.delete(`${server}/url/delete/${id}`,axiosConfig(token));
+    dispatch(urlsDeleteSuccess());
+  } catch (err) {    
+    const {error,message}=err.response.data;
+    dispatch(urlsDeleteError({message:error||message||'Error In Server'}));
+  }
+};
 
 const detailsOfShortUrl = (id) => async (dispatch,getState) => {
   const token=getState().authReducer.token;
@@ -126,6 +151,7 @@ const getAllVisitors = (id,page) =>async (dispatch,getState) => {
 
 export {
   generateShortUrl,
+  clearGeneratedUrl,
   getAllUrls,
   editShortUrl,
   deleteShortUrl,

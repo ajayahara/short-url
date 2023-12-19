@@ -1,38 +1,35 @@
 import { useEffect, useState } from "react";
-import {useSearchParams} from "react-router-dom"
+import { useSearchParams } from "react-router-dom";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getAllUrls } from "../redux/url/action";
 import { UrlRow } from "../components/UrlRow";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import { EditModal } from "../components/EditModal";
 
 export const AllUrl = () => {
+  const { urls } = useSelector(
+    (store) => ({ urls: store.urlReducer.urls }),
+    shallowEqual
+  );
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
   const dispatch = useDispatch();
-  const { urls } = useSelector((store) => {
-    const { isUrlsLoading, isUrlsError, errorUrlsMessage, urls } =
-      store.urlReducer;
-    return {
-      loading: isUrlsLoading,
-      error: isUrlsError,
-      message: errorUrlsMessage,
-      urls: urls,
-    };
-  }, shallowEqual);
-  const [searchParams,setSearchParams]=useSearchParams()
-  const [page, setPage] = useState(parseInt(searchParams.get('page')) || 1);
-
-  const handleEditClick = (urlId) => {
-    console.log(`Edit URL with ID: ${urlId}`);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [selectedUrl, setSelectedUrl] = useState(null);
+  const openEditModal = (url) => {
+    setSelectedUrl(url);
+    setEditModalOpen(true);
   };
-
-  const handleDeleteClick = (urlId) => {
-    console.log(`Delete URL with ID: ${urlId}`);
+  const closeEditModal = () => {
+    setSelectedUrl(null);
+    setEditModalOpen(false);
   };
-  useEffect(()=>{
-    setSearchParams({page});
-  },[page,setSearchParams]);
+  useEffect(() => {
+    setSearchParams({ page });
+  }, [page, setSearchParams]);
   useEffect(() => {
     dispatch(getAllUrls(page));
-  }, [dispatch,page]);
+  }, [dispatch, page]);
   return (
     <div className="p-4 mt-10 min-h-[90vh]">
       <section className="border border-gray-700 p-6 rounded mt-4">
@@ -41,11 +38,19 @@ export const AllUrl = () => {
             Generated short urls :
           </h2>
           <div className="flex items-center gap-2">
-            <button disabled={page==1} onClick={()=>setPage(pre=>pre-1)} className="text-green-500 disabled:text-gray-700 hover:underline border p-1 border-gray-700">
+            <button
+              disabled={page == 1}
+              onClick={() => setPage((pre) => pre - 1)}
+              className="text-green-500 disabled:text-gray-700 hover:underline border p-1 border-gray-700"
+            >
               <ChevronLeftIcon className="w-4 h-4 font-bold" />
             </button>
             <button className="text-white hover:underline">{page}</button>
-            <button disabled={urls.length<10} onClick={()=>setPage(pre=>pre+1)} className="text-green-500 disabled:text-gray-700 hover:underline border p-1 border-gray-700">
+            <button
+              disabled={urls.length < 10}
+              onClick={() => setPage((pre) => pre + 1)}
+              className="text-green-500 disabled:text-gray-700 hover:underline border p-1 border-gray-700"
+            >
               <ChevronRightIcon className="w-4 h-4 font-bold" />
             </button>
           </div>
@@ -71,13 +76,17 @@ export const AllUrl = () => {
                   page={page}
                   index={index}
                   url={url}
-                  handleDeleteClick={handleDeleteClick}
-                  handleEditClick={handleEditClick}
+                  openEditModal={openEditModal}
                 />
               );
             })}
           </tbody>
         </table>
+        <EditModal
+          isOpen={isEditModalOpen}
+          onClose={closeEditModal}
+          url={selectedUrl}
+        />
       </section>
     </div>
   );

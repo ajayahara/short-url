@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as types from "./actionType.js";
-const server = import.meta.env.VITE_SERVER;
+import { server } from "../../utils/environment.js";
 const loginPostRequest = () => {
   return { type: types.LOGIN_POST_REQUEST };
 };

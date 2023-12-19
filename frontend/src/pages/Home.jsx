@@ -1,27 +1,34 @@
-import  { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { generateShortUrl } from '../redux/url/action';
-import {format,addDays} from 'date-fns'
-const getTodayDate=()=>{
-  const date=new Date();
-  const today=format(date,'yyyy-MM-dd');
-  const tommorow=format(addDays(date,1),'yyyy-MM-dd');
+import { useEffect, useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { clearGeneratedUrl, generateShortUrl } from "../redux/url/action";
+import { format, addDays } from "date-fns";
+import {useNavigate} from 'react-router-dom'
+const getTodayDate = () => {
+  const date = new Date();
+  const today = format(date, "yyyy-MM-dd");
+  const tommorow = format(addDays(date, 1), "yyyy-MM-dd");
 
-  return {today,tommorow};
-}
+  return { today, tommorow };
+};
 const initialFormData = {
-  originalUrl: '',
-  title: '',
-  startDate: '',
-  expireDate: '',
-  description: '',
+  originalUrl: "",
+  title: "",
+  startDate: "",
+  expireDate: "",
+  description: "",
 };
 
 export const Home = () => {
   const dispatch = useDispatch();
-
+  const navigate=useNavigate()
   const [formData, setFormData] = useState(initialFormData);
-  const [date]=useState(getTodayDate());
+  const [date] = useState(getTodayDate());
+  const { loading, url } = useSelector((store) => {
+    return {
+      loading: store.urlReducer.isGenerateLoading,
+      url: store.urlReducer.genUrl,
+    };
+  },shallowEqual);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,7 +40,11 @@ export const Home = () => {
     dispatch(generateShortUrl(formData));
     setFormData(initialFormData);
   };
-
+  useEffect(()=>{
+    if(!url) return;
+    navigate(`details/${url._id}`);
+    dispatch(clearGeneratedUrl());
+  },[url,navigate,dispatch])
   return (
     <div className="w-full h-screen flex justify-center items-center text-white">
       <form
@@ -111,8 +122,8 @@ export const Home = () => {
         {/* Submit Button */}
         <div className="mt-4 flex justify-end items-center">
           <input
-            type="submit"
-            value="Generate"
+            type={loading ? "button" : "submit"}
+            value={loading ? "Loading..." : "Generate"}
             className="px-5 py-2 cursor-pointer bg-gradient-to-r from-indigo-500 via-purple-500 to-purple-500 rounded-md"
           />
         </div>
