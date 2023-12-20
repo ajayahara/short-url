@@ -363,7 +363,132 @@ Delete a specific shortened URL by its ID for the authenticated user.
 - **500 Internal Server Error:**
   - If there's an error during the retrieval of the shortened URL.
 
+### 6. Redirect URL
+
+Redirects to the original URL associated with the given short ID.
+
+#### Endpoint
+
+- **Method:** GET
+- **URL:** `/:shortId`
+
+#### Request Parameters
+
+- `shortId` (string, required): Short ID associated with the URL.
+
+#### Response
+
+- **Status Code:** 302 Found (Redirect)
+- **Redirect:** Redirects to the original URL
+
+#### Error Response
+
+- **Status Code:** 400 Bad Request
+  - **Message:** No short URL found with this short ID.
+
+- **Status Code:** 500 Internal Server Error
+  - **Error:** Error while finding all visitors.
+
+## Visitors API
+
+### 1. Get all visitors
+
+API for retrieving visitor information related to a specific URL.
+
+#### Endpoint
+
+- **Method:** GET
+- **URL:** `/get/:urlId`
+
+#### Request Parameters
+
+- `urlId` (string, required): ID of the URL for which visitor information is requested.
+
+#### Authorization
+
+This endpoint requires authorization.
+
+#### Response
+
+- **Status Code:** 200 OK
+- **Body:** JSON object containing the array of visitors.
+
+```json
+{
+  "visitors": [
+    {
+      "ipAddress": "127.0.0.1",
+      "urlId": "urlId1",
+      "referFrom": "http://referer.com",
+      "createdAt": "2023-01-01T12:00:00.000Z"
+    },
+    // Additional visitors...
+  ]
+}
+  ```
+  #### Error Response
+
+- **Status Code:** 400 Bad Request
+  - **Message:** No short URL found with this ID.
+
+- **Status Code:** 500 Internal Server Error
+  - **Error:** Error while finding all visitors.
+
 ## Frontend Documentation
+
+1. [Project Structure](#project-structure)
+2. [Key Components](#key-components)
+3. [Screenshots](#screenshots)
+4. [Main Libraries](#main-libraries)
+
+### Project Structure
+
+The frontend of the project is organized into the following pages:
+
+- Login
+- Register
+- Home
+- About
+- All URLs
+- Details
+- Not Found
+
+### Key Components
+
+1. **Login Page**
+   - Form for user login.
+   ![Login Page](./screenshots/login.png)
+
+2. **Register Page**
+   - Form for user registration.
+  ![Register Page](./screenshots/register.png)
+3. **Home Page**
+   - Form to generate a short URL.
+   ![Home Page](./screenshots/home.png)
+
+4. **About Page**
+   - Provides information on the usage and features of the website.
+  ![About Page](./screenshots/about.png)
+5. **All URLs Page**
+   - Displays all URLs created by the user.
+   - Allows modification and deletion of URLs.
+  ![All URLs Page](./screenshots/all-url.png)
+
+6. **Details Page**
+   - Shows detailed information about a specific URL.
+   - Includes visitor information.
+  ![Details Page](./screenshots/detail.png)
+
+7. **Not Found Page**
+   - Displays when a route is not found.
+  ![Details Page](./screenshots/not-found.png)
+
+### Main Libraries
+
+- [React](https://reactjs.org/): A JavaScript library for building user interfaces.
+- [React Router](https://reactrouter.com/): Declarative routing for React.js.
+- [Tailwind CSS](https://tailwindcss.com/): A utility-first CSS framework.
+
 ## Contributing
 
 Thank you for considering contributing to our project! Whether it's reporting a bug, suggesting a feature, or submitting a pull request, we appreciate your involvement. To contribute, please follow these guidelines:
