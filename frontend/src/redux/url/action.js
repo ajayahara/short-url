@@ -33,6 +33,9 @@ const urlsEditError = ({ message }) => {
 const urlsEditSuccess = () => {
   return { type: types.URLS_EDIT_SUCCESS };
 };
+const clearEditSuccess=()=>{
+  return {type:types.CLEAR_EDIT_SUCCESS};
+};
 
 const urlsDeleteRequest = () => {
   return { type: types.URLS_DELETE_REQUEST };
@@ -43,6 +46,9 @@ const urlsDeleteError = ({ message }) => {
 const urlsDeleteSuccess = () => {
   return { type: types.URLS_DELETE_SUCCESS };
 };
+const clearDeleteSuccess=()=>{
+  return {type:types.CLEAR_DELETE_SUCCESS}
+}
 
 const detailsGetRequest = () => {
   return { type: types.DETAILS_GET_REQUEST };
@@ -85,9 +91,6 @@ const generateShortUrl = (formData) => async (dispatch,getState) => {
     dispatch(generatePostError({message:error||message||'Error In Server'}));
   }
 };
-const clearGeneratedUrl=()=>(dispatch)=>{
-  dispatch(clearGenUrl())
-}
 
 const getAllUrls = (page) =>async (dispatch,getState) => {
   const token=getState().authReducer.token;
@@ -148,7 +151,15 @@ const getAllVisitors = (id,page) =>async (dispatch,getState) => {
     dispatch(visitorsGetError({message:error||message||'Error In Server'}));
   }
 };
-
+const clearGeneratedUrl=()=>(dispatch)=>{
+  dispatch(clearGenUrl())
+}
+const clearEditUrl=()=>(dispatch)=>{
+  dispatch(clearEditSuccess())
+}
+const clearDeleteUrl=()=>(dispatch)=>{
+  dispatch(clearDeleteSuccess())
+}
 export {
   generateShortUrl,
   clearGeneratedUrl,
@@ -157,4 +168,6 @@ export {
   deleteShortUrl,
   detailsOfShortUrl,
   getAllVisitors,
+  clearEditUrl,
+  clearDeleteUrl
 };

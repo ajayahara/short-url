@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { getAllUrls } from "../redux/url/action";
+import { clearDeleteUrl, clearEditUrl, getAllUrls } from "../redux/url/action";
 import { UrlRow } from "../components/UrlRow";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { EditModal } from "../components/EditModal";
 
 export const AllUrl = () => {
-  const { urls } = useSelector(
-    (store) => ({ urls: store.urlReducer.urls }),
+  const { urls, editSuccess, deleteSuccess } = useSelector(
+    (store) => ({
+      urls: store.urlReducer.urls,
+      editSuccess: store.urlReducer.isEditUrlsSuccess,
+      deleteSuccess: store.urlReducer.isDeleteUrlsSuccess,
+    }),
     shallowEqual
   );
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,6 +28,12 @@ export const AllUrl = () => {
     setSelectedUrl(null);
     setEditModalOpen(false);
   };
+  useEffect(()=>{
+    if(!editSuccess && !deleteSuccess) return;
+    dispatch(getAllUrls(page))
+    dispatch(clearEditUrl());
+    dispatch(clearDeleteUrl());
+  },[editSuccess,deleteSuccess,dispatch,page]);
   useEffect(() => {
     setSearchParams({ page });
   }, [page, setSearchParams]);

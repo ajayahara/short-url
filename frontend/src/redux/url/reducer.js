@@ -11,10 +11,12 @@ const initialState = {
   urls: [],
 
   isEditUrlsLoading: false,
+  isEditUrlsSuccess:false,
   isEditUrlsError: false,
   errorEditUrlsMessage: null,
 
   isDeleteUrlsLoading: false,
+  isDeleteUrlsSuccess:false,
   isDeleteUrlsError: false,
   errorDeleteUrlsMessage: null,
 
@@ -30,7 +32,6 @@ const initialState = {
 };
 export const reducer = (state = initialState, action) => {
   const { type, payload } = action;
-  console.log(type, payload);
   switch (type) {
     // GENERATE_POST cases
     case types.GENERATE_POST_REQUEST:
@@ -103,11 +104,16 @@ export const reducer = (state = initialState, action) => {
     case types.URLS_EDIT_SUCCESS:
       return {
         ...state,
+        isEditUrlsSuccess:true,
         isEditUrlsLoading: false,
         isEditUrlsError: false,
         errorEditUrlsMessage: null,
       };
-
+    case types.CLEAR_EDIT_SUCCESS:
+      return {
+        ...state,
+        isEditUrlsSuccess:false
+      }
     // URLS_DELETE cases
     case types.URLS_DELETE_REQUEST:
       return {
@@ -126,9 +132,15 @@ export const reducer = (state = initialState, action) => {
     case types.URLS_DELETE_SUCCESS:
       return {
         ...state,
+        isDeleteUrlsSuccess:true,
         isDeleteUrlsLoading: false,
         isDeleteUrlsError: false,
         errorDeleteUrlsMessage: null,
+      };
+    case types.CLEAR_DELETE_SUCCESS:
+      return {
+        ...state,
+        isDeleteUrlsSuccess:false
       };
     // VISITORS_GET cases
     case types.VISITORS_GET_REQUEST:
