@@ -17,6 +17,7 @@ export const AllUrl = () => {
   );
   const [searchParams, setSearchParams] = useSearchParams();
   const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
+  const [filter, setFilter] = useState(searchParams.get("filter") || "all");
   const dispatch = useDispatch();
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedUrl, setSelectedUrl] = useState(null);
@@ -28,18 +29,27 @@ export const AllUrl = () => {
     setSelectedUrl(null);
     setEditModalOpen(false);
   };
-  useEffect(()=>{
-    if(!editSuccess && !deleteSuccess) return;
-    dispatch(getAllUrls(page))
+
+  useEffect(() => {
+    if (!editSuccess) return;
+    dispatch(getAllUrls(page, filter));
     dispatch(clearEditUrl());
+  }, [editSuccess, dispatch, page, filter]);
+
+  useEffect(() => {
+    if (!deleteSuccess) return;
+    dispatch(getAllUrls(page, filter));
     dispatch(clearDeleteUrl());
-  },[editSuccess,deleteSuccess,dispatch,page]);
+  }, [deleteSuccess, dispatch, page, filter]);
+
   useEffect(() => {
-    setSearchParams({ page });
-  }, [page, setSearchParams]);
+    setSearchParams({ page, filter });
+  }, [page, filter, setSearchParams]);
+
   useEffect(() => {
-    dispatch(getAllUrls(page));
-  }, [dispatch, page]);
+    dispatch(getAllUrls(page, filter));
+  }, [page, filter, dispatch]);
+
   return (
     <div className="p-4 mt-10 min-h-[90vh]">
       <section className="border border-gray-700 p-6 rounded mt-4">
@@ -48,6 +58,19 @@ export const AllUrl = () => {
             Generated short urls :
           </h2>
           <div className="flex items-center gap-2">
+            <select
+              value={filter}
+              onChange={(e) => {
+                setPage(1);
+                setFilter(e.target.value);
+              }}
+              className="text-white bg-gray-800 border border-gray-700 focus:outline-none"
+            >
+              <option value="all">All</option>
+              <option value="expired">Expired</option>
+              <option value="active">Active</option>
+              <option value="draft">Draft</option>
+            </select>
             <button
               disabled={page == 1}
               onClick={() => setPage((pre) => pre - 1)}

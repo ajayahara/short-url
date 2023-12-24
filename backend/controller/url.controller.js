@@ -41,9 +41,9 @@ const createShortUrl = async (req, res) => {
 };
 const getAllShortedUrl = async (req, res) => {
   const userId = req.userId;
-  const { skip, limit, order } = req.pagination;
+  const { skip, limit, order, filter } = req.pagination;
   try {
-    const shortUrls = await UrlModel.find({ userId }).skip(skip).limit(limit).sort({createdAt:order});
+    const shortUrls = await UrlModel.find({ userId, ...filter}).skip(skip).limit(limit).sort({createdAt:order});
     return res.status(201).json({ shortUrls });
   } catch (error) {
     console.log(error);

@@ -92,11 +92,12 @@ const generateShortUrl = (formData) => async (dispatch,getState) => {
   }
 };
 
-const getAllUrls = (page) =>async (dispatch,getState) => {
+const getAllUrls = (page,filter) =>async (dispatch,getState) => {
   const token=getState().authReducer.token;
   try {
     dispatch(urlsGetRequest());
-    const response = await axios.get(`${server}/url/get/all?page=${page}`,axiosConfig(token));
+    const response = await axios.get(`${server}/url/get/all?page=${page}&filter=${filter}`,axiosConfig(token));
+    console.log('called')
     dispatch(urlsGetSuccess({urls:response.data.shortUrls}));
   } catch (err) {
     const {error,message}=err.response.data;
